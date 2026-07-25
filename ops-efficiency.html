@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>商品运营部人效分析报告</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f7fa;color:#333;line-height:1.6}
+.container{max-width:1200px;margin:0 auto;padding:20px}
+h1{text-align:center;padding:30px 0 10px;font-size:24px;color:#1a1a2e}
+.subtitle{text-align:center;color:#666;margin-bottom:30px;font-size:13px}
+.section{background:#fff;border-radius:12px;padding:24px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.section h2{font-size:16px;color:#1a1a2e;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #e8e8e8}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.kpi{border-radius:10px;padding:14px;color:#fff;text-align:center}
+.kpi.up{background:linear-gradient(135deg,#11998e,#38ef7d)}
+.kpi.dn{background:linear-gradient(135deg,#667eea,#764ba2)}
+.kpi.r{background:linear-gradient(135deg,#f5576c,#f093fb)}
+.kpi.y{background:linear-gradient(135deg,#f6d365,#fda085)}
+.kpi .l{font-size:11px;opacity:.85}
+.kpi .v{font-size:22px;font-weight:700;margin:4px 0}
+.kpi .c{font-size:11px;opacity:.9}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px}
+.chart-box{position:relative;height:280px}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:12px}
+th,td{padding:8px 10px;text-align:center;border-bottom:1px solid #eee}
+th{background:#f8f9fa;font-weight:600;color:#555}
+td:first-child,th:first-child{text-align:left}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;margin:2px}
+.tag-red{background:#ffebee;color:#c62828}
+.tag-green{background:#e8f5e9;color:#2e7d32}
+.tag-orange{background:#fff3e0;color:#e65100}
+.note{color:#888;font-size:11px;margin-top:8px}
+.problem-box{padding:16px;border-radius:8px;margin-top:12px}
+.problem-box.red{background:#fff8f8;border-left:4px solid #f5576c}
+.problem-box.green{background:#f8fff8;border-left:4px solid #11998e}
+.problem-box h3{font-size:14px;margin-bottom:8px}
+.problem-box ul{list-style:none;font-size:13px;line-height:2.2}
+.timeline{position:relative;padding-left:20px;margin-top:12px}
+.timeline::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:2px;background:#e0e0e0}
+.timeline-item{position:relative;margin-bottom:16px;padding-left:20px}
+.timeline-item::before{content:'';position:absolute;left:-17px;top:6px;width:10px;height:10px;border-radius:50%;background:#667eea}
+.timeline-item .t-title{font-weight:600;font-size:13px}
+.timeline-item .t-desc{font-size:12px;color:#666}
+@media(max-width:768px){.row{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>📊 商品运营部人效分析报告</h1>
+<p class="subtitle">2026年上半年 vs 2025年上半年 | 部门负责人：Christine</p>
+
+<!-- 一、核心指标 -->
+<div class="section">
+<h2>一、核心人效指标</h2>
+<div class="kpi-grid">
+<div class="kpi up"><div class="l">部门收入贡献</div><div class="v">7,658.6万</div><div class="c">同比+10.8%</div></div>
+<div class="kpi dn"><div class="l">平均人数</div><div class="v">5.3人</div><div class="c">同比减少0.9人</div></div>
+<div class="kpi up"><div class="l">月均人效</div><div class="v">239.3万/人</div><div class="c">同比+28.6% ↑</div></div>
+<div class="kpi up"><div class="l">人力成本</div><div class="v">36.9万</div><div class="c">同比↓6.1%</div></div>
+<div class="kpi up"><div class="l">人力/收入占比</div><div class="v">0.5%</div><div class="c">去年0.6%，优化0.1pp</div></div>
+<div class="kpi y"><div class="l">人效提升幅度</div><div class="v">+28.6%</div><div class="c">收入↑10.8% + 人数↓14.5%</div></div>
+</div>
+<div class="row">
+<div class="chart-box"><canvas id="effChart"></canvas></div>
+<div class="chart-box"><canvas id="costChart"></canvas></div>
+</div>
+</div>
+
+<!-- 二、人员变动 -->
+<div class="section">
+<h2>二、人员变动与职能调整</h2>
+<table>
+<thead><tr><th>变动</th><th>岗位</th><th>处理方式</th><th>影响</th></tr></thead>
+<tbody>
+<tr><td><span class="tag tag-red">减员</span></td><td>商品运营</td><td>负责人（Christine）承接全部职能</td><td>管理+执行一体化，决策效率↑</td></tr>
+<tr><td><span class="tag tag-red">减员</span></td><td>跟单助理</td><td>工作分摊到部门全员</td><td>每人工作量↑，任务更杂</td></tr>
+<tr><td><span class="tag tag-orange">临时</span></td><td>贴纸岗（旺季）</td><td>临工协调处理</td><td>旺季弹性用工，降低固定成本</td></tr>
+</tbody>
+</table>
+<p class="note">通过岗位合并+职能分摊+弹性用工，减少固定人力成本2.4万/半年（估），同时保证业务正常运转</p>
+</div>
+
+<!-- 三、现状分析 -->
+<div class="section">
+<h2>三、现状分析 — 优化成果 & 存在问题</h2>
+
+<div class="problem-box green">
+<h3>✅ 优化成果</h3>
+<ul>
+<li>💡 人效提升28.6%：通过流程优化和职能整合，用更少的人创造更多产出</li>
+<li>💡 人力成本下降6.1%：减员未影响业务增长，证明优化方向正确</li>
+<li>💡 弹性用工模式：旺季临工解决贴纸瓶颈，不增加固定编制</li>
+<li>💡 决策效率提升：商品运营由负责人直接承接，减少信息传递层级</li>
+</ul>
+</div>
+
+<div class="problem-box red" style="margin-top:16px">
+<h3>⚠️ 存在问题</h3>
+<ul>
+<li>🔴 <strong>新款开发制单准确性不足</strong> — 入库前制单错误率高，导致重复性修改工作量大</li>
+<li>🔴 <strong>沟通成本居高</strong> — 制单信息需反复确认（款式/面料/工艺/尺码），多方对接耗时</li>
+<li>🔴 <strong>样衣查找效率低</strong> — 样衣管理无系统化，寻找样衣耗费大量时间成本</li>
+<li>🟡 <strong>岗位职能交叉</strong> — 每人工作内容较杂，专注度下降，易出错</li>
+</ul>
+</div>
+</div>
+
+<!-- 四、问题聚焦 -->
+<div class="section">
+<h2>四、核心瓶颈聚焦</h2>
+<div class="row">
+<div>
+<h3 style="font-size:14px;color:#c62828;margin-bottom:12px">🎯 瓶颈1：新款制单准确性</h3>
+<table>
+<thead><tr><th>问题环节</th><th>影响</th></tr></thead>
+<tbody>
+<tr><td>入库前制单信息不完整</td><td>反复补充/修改，重复劳动</td></tr>
+<tr><td>面料/工艺参数口径不一致</td><td>部门间反复沟通确认</td></tr>
+<tr><td>款号/颜色/尺码录入易错</td><td>入库后发现需返工</td></tr>
+<tr><td>新款信息来源分散</td><td>需多方收集拼凑</td></tr>
+</tbody>
+</table>
+<p class="note">核心原因：缺乏标准化的制单模板和信息收集流程</p>
+</div>
+<div>
+<h3 style="font-size:14px;color:#c62828;margin-bottom:12px">🎯 瓶颈2：样衣查找效率</h3>
+<table>
+<thead><tr><th>问题环节</th><th>影响</th></tr></thead>
+<tbody>
+<tr><td>样衣无固定编号/位置</td><td>每次查找耗时15-30min</td></tr>
+<tr><td>样衣借出/归还无记录</td><td>找不到时不知在谁手上</td></tr>
+<tr><td>季节交替样衣混放</td><td>翻找范围大，效率低</td></tr>
+<tr><td>跨部门借用无管控</td><td>丢失/损坏无从追溯</td></tr>
+</tbody>
+</table>
+<p class="note">核心原因：缺乏样衣管理系统（登记+定位+借还）</p>
+</div>
+</div>
+</div>
+
+<!-- 五、解决方案 -->
+<div class="section">
+<h2>五、解决方案</h2>
+
+<div class="problem-box green">
+<h3>📋 方案1：制单标准化 — 降低重复工作+沟通成本</h3>
+<ul>
+<li>① 建立<strong>标准制单模板</strong>：明确必填字段（款号/面料/颜色/工艺/尺码表），一次填齐</li>
+<li>② 信息源前置收集：设计出款时即填写完整参数，而非入库前补录</li>
+<li>③ 制单审核节点：入库前设一道自检+复核，减少入库后返工</li>
+<li>④ 工具辅助：用系统/表格模板自动校验必填项完整性，减少人工漏填</li>
+</ul>
+<p class="note">预期效果：制单重复修改工作量↓50%，沟通确认次数↓30%</p>
+</div>
+
+<div class="problem-box green" style="margin-top:16px">
+<h3>📋 方案2：样衣管理系统化 — 降低查找时间成本</h3>
+<ul>
+<li>① <strong>样衣编号+定位</strong>：每件样衣贴编号标签，固定存放位置（按季节/品类分区）</li>
+<li>② 借还登记表：谁借走、什么时候借的、预计归还时间，在线可查</li>
+<li>③ 拍照归档：每件样衣入库时拍照录入，查找时先看图确认</li>
+<li>④ 定期盘点：每月盘点一次，及时处理丢失/破损</li>
+</ul>
+<p class="note">预期效果：样衣查找时间从15-30min↓至3-5min，年节省工时约200小时</p>
+</div>
+</div>
+
+<!-- 六、总结 -->
+<div class="section" style="background:linear-gradient(135deg,#667eea10,#764ba210)">
+<h2>六、总结</h2>
+<table>
+<thead><tr><th>维度</th><th>现状</th><th>评价</th></tr></thead>
+<tbody>
+<tr><td><strong>人效</strong></td><td>239.3万/人/月，同比+28.6%</td><td><span class="tag tag-green">优秀</span></td></tr>
+<tr><td><strong>成本</strong></td><td>人力成本36.9万，同比↓6.1%</td><td><span class="tag tag-green">优化</span></td></tr>
+<tr><td><strong>人员</strong></td><td>减员2人，职能内部消化</td><td><span class="tag tag-green">合理</span></td></tr>
+<tr><td><strong>工作效率</strong></td><td>制单重复+样衣查找耗时</td><td><span class="tag tag-red">需改善</span></td></tr>
+<tr><td><strong>协作成本</strong></td><td>沟通确认环节过多</td><td><span class="tag tag-orange">需优化</span></td></tr>
+</tbody>
+</table>
+<p style="margin-top:16px;font-size:13px;line-height:2"><strong>结论：</strong>部门通过人员优化+流程调整，人效大幅提升28.6%，成本下降6.1%，方向正确。<br>当前瓶颈不在人手不足，而在<strong>流程标准化</strong>（制单）和<strong>管理工具化</strong>（样衣），解决后可进一步释放人效空间。</p>
+</div>
+
+</div>
+
+<script>
+// 人效对比图
+new Chart(document.getElementById('effChart'),{type:'bar',data:{labels:['月均人效(万/人)','收入(百万)','人数'],datasets:[{label:'2026 H1',data:[239.3,76.6,5.3],backgroundColor:'#667eea'},{label:'2025 H1',data:[186.1,69.1,6.2],backgroundColor:'#ccc'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{title:{display:true,text:'人效核心指标对比'}}}});
+// 成本对比图
+new Chart(document.getElementById('costChart'),{type:'doughnut',data:{labels:['人力成本','其他运营成本'],datasets:[{data:[36.9,7621.7],backgroundColor:['#f5576c','#e0e0e0']},{data:[39.3,6875.0],backgroundColor:['#ff8a65','#f5f5f5']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{title:{display:true,text:'人力成本占收入比(内圈25年/外圈26年)'}}}});
+</script>
+</body>
+</html>
