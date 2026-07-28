@@ -282,11 +282,13 @@ new Chart(document.getElementById('colorChart25'),{type:'bar',data:{labels:color
 <img id="lightbox-img" src="">
 </div>
 <script>
-document.querySelectorAll('.img-thumb').forEach(img=>{
-  img.onclick=function(){
-    document.getElementById('lightbox-img').src=this.src;
+document.querySelectorAll('.img-thumb').forEach(function(img){
+  img.addEventListener('click', function(e){
+    e.stopPropagation();
+    document.getElementById('lightbox-img').src=img.src.replace(/\/img\//, '/img/').replace('60','500');
+    document.getElementById('lightbox-img').src=img.src;
     document.getElementById('lightbox').classList.add('show');
-  }
+  });
 });
 </script>
 </body></html>
